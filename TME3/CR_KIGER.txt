@@ -1,0 +1,204 @@
+::::::::::::::
+Cabine.java
+::::::::::::::
+public class Cabine{
+  private int volume;
+  private String couleur;
+  public Cabine(int v, String c){
+    volume = v;
+    couleur = c;
+  }
+  public String toString(){
+    return ("Volume cabine m3 : "+volume+"  Couleur : "+couleur);
+  }
+  public void setCouleur(String c){
+    this.couleur = c;
+  }
+  public Cabine clone(){
+  	return (new Cabine(volume, couleur));
+  }
+}
+::::::::::::::
+Point.java
+::::::::::::::
+import java.lang.Math;
+public class Point{
+  private int posx;
+  private int posy;
+  public Point(){
+    this((int)(Math.random() * (20) - 10), (int)(Math.random() * (20) - 10));
+  }
+  public Point(int x, int y){
+    posx = x;
+    posy = y;
+  }
+  public void setPosx(int x){
+    this.posx = x;
+  }
+  public void setPosy(int y){
+    this.posy = y;
+  }
+  public int getPosx(){
+    return this.posx;
+  }
+  public int getPosy(){
+    return this.posy;
+  }
+  public String toString(){
+    return ("( "+posx+", "+posy+" )");
+  }
+  public int distance(Point p){
+    int A = p.posx - this.posx;
+    int B = p.posy - this.posy;
+    return ((int)Math.sqrt(A*A + B*B));
+  }
+  public void deplaceToi(int newx, int newy){
+    this.posy = newy;
+    this.posx = newx;
+  }
+}
+::::::::::::::
+Roue.java
+::::::::::::::
+public class Roue{
+  private int diamètre;
+  public Roue(int d){
+    diamètre = d;
+  }
+  public Roue(){
+    this(60);
+  }
+  public String toString(){
+    return ("Roue de diamètre: "+diamètre);
+  }
+  public Roue clone(){
+  	return (new Roue(diamètre));
+  }
+}
+::::::::::::::
+TestPion.java
+::::::::::::::
+public class TestPion{
+	public static void main(String[] args) {
+  		Pion unPion=new Pion("Atchoum ");
+  		System.out.println(unPion.getPoint());
+		Pion autrePion= new Pion(unPion);
+		autrePion.getPoint() = autrePion.getPoint().clone();
+		System.out.println(autrePion.getPoint());
+  		autrePion.setNom("Dormeur");
+  		System.out.println(unPion.getNom());
+		autrePion.getPoint().getCoord();
+		unPion.getPoint().getCoord();
+		autrePion.seDeplacer();
+		unPion.getPoint().getCoord();
+		autrePion.getPoint().getCoord();
+		System.out.println(unPion.getPoint());
+		System.out.println(autrePion.getPoint());
+  	}
+}
+::::::::::::::
+TestPoint.java
+::::::::::::::
+public class TestPoint{
+  public static void main(String[] args){
+    Point p1 = new Point();
+    Point p2 = new Point();
+    System.out.println(p1.toString());
+    System.out.println(p2.toString());
+    System.out.println(p2.distance(p1));
+    p2.deplaceToi(4, 2);
+    System.out.println(p2.toString());
+
+  }
+
+}
+::::::::::::::
+TestTracteur.java
+::::::::::::::
+public class TestTracteur{
+  public static void main(String[] args){
+    Roue gr1 = new Roue(120);
+    Roue gr2 = new Roue(120);
+    Roue pr1 = new Roue();
+    Roue pr2 = new Roue();
+    System.out.println(gr1);
+    System.out.println(gr2);
+    System.out.println(pr1);
+    System.out.println(pr2);
+    Cabine c1 = new Cabine(3, "bleue");
+    System.out.println(c1.toString());
+    Tracteur t1 = new Tracteur(c1, pr1, pr2, gr1, gr2);
+    System.out.println(t1.toString());
+    Tracteur t2 = t1.clone();
+    t2.peindre("rouge");
+    System.out.println(t1.toString());
+  }
+}
+::::::::::::::
+TestTriangle.java
+::::::::::::::
+public class TestTriangle{
+  public static void main(String[] args){
+    Point p1 = new Point();
+    System.out.println(p1.toString());
+    Point p2 = new Point();
+    System.out.println(p2.toString());
+    Point p3 = new Point();
+    System.out.println(p3.toString());
+    Triangle t1 = new Triangle(p1, p2, p3);
+    System.out.println(t1.toString());
+    System.out.println(t1.getPerimetre());
+  }
+}
+::::::::::::::
+Tracteur.java
+::::::::::::::
+public class Tracteur{
+  private Cabine c;
+  private Roue r1, r2, r3, r4;
+  public Tracteur(Cabine c1, Roue R1, Roue R2, Roue R3, Roue R4){
+    c = c1;
+    r1 = R1;
+    r2 = R2;
+    r3 = R3;
+    r4 = R4;
+  }
+  public String toString(){
+    return ("Cabine :"+c.toString()+" Roue 1 : "+r1.toString()+" Roue 2 : "+r2.toString()+" Roue 3 : "+r3.toString()+" Roue 4 : "+r4.toString());
+  }
+  public void peindre(String couleur){
+    c.setCouleur(couleur);
+  }
+  public Tracteur clone(){
+    return new Tracteur(c.clone(), r1.clone(), r2.clone(), r3.clone(), r4.clone());
+  }
+}
+::::::::::::::
+Triangle.java
+::::::::::::::
+public class Triangle{
+  private Point a;
+  private Point b;
+  private Point c;
+  public Triangle(Point a1, Point b1, Point c1){
+    a = a1;
+    b = b1;
+    c = c1;
+  }
+  public Triangle(){
+    this(new Point(), new Point(), new Point());
+  }
+  public int getPerimetre(){
+    return ((int)(a.distance(b) + a.distance(c) + c.distance(b)));
+  }
+  public String toString(){
+      return("coordonnées des sommets  A: "+a.toString()+"B: "+b.toString()+"c: "+c.toString());
+  }
+  public boolean saMe(Triangle t){
+    if ((this.a.distance(this.b) == t.a.distance(t.b)) && (this.a.distance(this.c) == t.a.distance(t.c)) && (this.c.distance(this.b) == t.c.distance(t.b))){
+      return true;
+    else
+      return false;
+    }
+  }
+}
